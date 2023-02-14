@@ -18,13 +18,13 @@ public class CameraFollow : MonoBehaviour
     void Start()
     {
         camHeight = Camera.main.orthographicSize * 2;
-        camWidth = Camera.main.aspect;
+        camWidth = camHeight * Camera.main.aspect;
 
         float leftBoundsWidth = leftBounds.GetComponentInChildren<SpriteRenderer> ().bounds.size.x /2;
         float rightBoundsWidth = rightBounds.GetComponentInChildren<SpriteRenderer> ().bounds.size.x /2;
 
         levelMinX = leftBounds.position.x + leftBoundsWidth + (camWidth/2);
-        levelMaxX = rightBounds.position.x + rightBoundsWidth + (camWidth/2);
+        levelMaxX = rightBounds.position.x - rightBoundsWidth - (camWidth/2);
 
 
     }
