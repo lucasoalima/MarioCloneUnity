@@ -4,17 +4,32 @@ using UnityEngine;
 
 public class Player : MonoBehaviour
 {
+    public float jumpVelocity;
     public Vector2 velocity;
-
+    public float gravity;
     public LayerMask wallMask;
+    public LayerMask floorMask;
 
     private bool walk,
         walk_left,
         walk_right,
         jump;
 
+    public enum PlayerState{
+        jumping,
+        idle,
+        walking
+        
+    }
+    private PlayerState playerState = PlayerState.idle;
+
+    private bool grounded = false;
     // Start is called before the first frame update
-    void Start() { }
+    void Start() {
+
+        // Fall();
+
+    }
 
     // Update is called once per frame
     void Update()
@@ -44,6 +59,23 @@ public class Player : MonoBehaviour
             pos = CheckWallRays (pos, scale.x);
 
         }
+
+        if(jump && playerState != PlayerState.jumping){
+            playerState = PlayerState.jumping;
+
+            velocity = new Vector2(velocity.x, jumpVelocity);
+        }
+        if(playerState == PlayerState.jumping){
+
+            pos.y += velocity.y * Time.deltaTime;
+
+            velocity.y -= gravity * Time.deltaTime;
+        }
+
+        if (velocity.y <= 0)
+        pos = CheckFloorRays (pos);
+            
+
         transform.localPosition = pos;
         transform.localScale = scale;
     }
@@ -79,6 +111,57 @@ public class Player : MonoBehaviour
         }
 
         return pos;
+
+    }
+
+    Vector3 CheckFloorRays (Vector3 pos){
+        
+        Vector2 originLeft = new Vector2 (pos.x - 0.5f + 0.2f, pos.y - 1f);
+        Vector2 originMiddle = new Vector2(pos.x, pos.y - 1f);
+        Vector2 originRight = new Vector2(pos.x + 0.5f - 0.2f, pos.y -1f);
+
+        RaycastHit2D floorLeft = Physics2D.Raycast (originLeft, Vector2.down , velocity.y * Time.deltaTime, floorMask);
+        RaycastHit2D floorMiddle = Physics2D.Raycast (originLeft, Vector2.down , velocity.y * Time.deltaTime, floorMask);
+        RaycastHit2D floorRight = Physics2D.Raycast (originLeft, Vector2.down , velocity.y * Time.deltaTime, floorMask);
+
+        if(floorLeft.collider != null || floorMiddle.collider != null || floorRight.collider != null){
+
+            RaycastHit2D hitRay = floorRight;
+
+            if(floorLeft){
+                hitRay = floorLeft;
+            }else if(floorMiddle){
+                hitRay = floorMiddle;
+            }
+            else if(floorRight){
+                hitRay = floorRight;
+            }
+
+            grounded = true;
+
+            playerState = PlayerState.idle;
+
+            velocity.y = 0;
+
+            pos.y = hitRay.collider.bounds.center.y + hitRay.collider.bounds.size.y / 2 + 1;
+
+        } else{
+
+            if (playerState != PlayerState.jumping){
+                Fall();
+            }
+        }
+
+        return pos;
+    }
+
+    void Fall(){
+
+        velocity.y = 0;
+
+        playerState = PlayerState.jumping;
+
+        grounded = false;
 
     } 
 }

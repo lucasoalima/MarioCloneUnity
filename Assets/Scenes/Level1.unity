@@ -242,7 +242,12 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 103438, guid: a2921b55bcf164853960c853662332ad, type: 3}
   m_PrefabInstance: {fileID: 293229031}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &294160028
+--- !u!4 &294160033 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 466550, guid: a2921b55bcf164853960c853662332ad, type: 3}
+  m_PrefabInstance: {fileID: 293229031}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &294160038
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -254,15 +259,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 74bf780694e2d9b4b93f146971fe67c6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  jumpVelocity: 23
   velocity: {x: 7, y: 0}
+  gravity: 65
   wallMask:
     serializedVersion: 2
     m_Bits: 1
---- !u!4 &294160033 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 466550, guid: a2921b55bcf164853960c853662332ad, type: 3}
-  m_PrefabInstance: {fileID: 293229031}
-  m_PrefabAsset: {fileID: 0}
+  floorMask:
+    serializedVersion: 2
+    m_Bits: 1
 --- !u!1001 &325027413
 PrefabInstance:
   m_ObjectHideFlags: 0
